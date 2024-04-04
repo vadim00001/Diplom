@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ActiveLvl">
+        <item>Базовый обмен (1)</item>
+        <item>Минимальная (1.2)</item>
+        <item>Небольшая (1.375)</item>
+        <item>Средняя (1.46)</item>
+        <item>Выше среднего (1.55)</item>
+        <item>Повышенная (1.64)</item>
+        <item>Высокая (1.72)</item>
+        <item>Очень высокая (1.9)</item>
+    </string-array>
+
+    <string-array name="Formula">
+        <item>Миффлина-Сан Жеора</item>
+        <item>Харриса-Бенедикта</item>
+        <item>Кэтча-МакАрдла</item>
+    </string-array>
+
+    <string-array name="Goal">
+        <item>Поддержание текущего веса</item>
+        <item>Похудение</item>
+        <item>Набор массы</item>
+    </string-array>
+</resources>

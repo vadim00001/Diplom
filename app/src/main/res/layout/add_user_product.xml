@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnAddUserProduct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/buttonAddProduct"
+                app:cornerRadius="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/edTxtCarb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:ems="10"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnAddUserProduct"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView32" />
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/CarbUnit"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/edTxtCarb"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edTxtCarb" />
+
+            <EditText
+                android:id="@+id/edTxtFats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/edTxtCarb"
+                app:layout_constraintEnd_toEndOf="@+id/edTxtCarb"
+                app:layout_constraintStart_toStartOf="@+id/edTxtCarb" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/FatsUnit"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/edTxtFats"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edTxtFats" />
+
+            <EditText
+                android:id="@+id/edTxtProtein"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/edTxtFats"
+                app:layout_constraintEnd_toEndOf="@+id/edTxtFats"
+                app:layout_constraintStart_toStartOf="@+id/edTxtFats" />
+
+            <TextView
+                android:id="@+id/textView31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/ProteinUnit"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/edTxtProtein"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edTxtProtein" />
+
+            <EditText
+                android:id="@+id/edTxtKcal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/edTxtProtein"
+                app:layout_constraintEnd_toEndOf="@+id/edTxtProtein"
+                app:layout_constraintStart_toStartOf="@+id/edTxtProtein" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/CaloriesUnit"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/edTxtKcal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edTxtKcal" />
+
+            <EditText
+                android:id="@+id/edTxtProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="text"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/edTxtKcal"
+                app:layout_constraintEnd_toEndOf="@+id/edTxtKcal"
+                app:layout_constraintStart_toStartOf="@+id/edTxtKcal"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/productName"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/edTxtProductName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edTxtProductName" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnDeleteUserProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удалить\nмои продукты"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/txtAddProduct"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView10"
+        app:layout_constraintEnd_toEndOf="@+id/cardView10"
+        app:layout_constraintStart_toStartOf="@+id/cardView10" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/breakfast"
+        android:title="@string/breakfast" />
+    <item
+        android:id="@+id/lunch"
+        android:title="@string/lunch" />
+    <item
+        android:id="@+id/dinner"
+        android:title="@string/dinner" />
+    <item
+        android:id="@+id/morning_snack"
+        android:title="@string/morning_snack" />
+    <item
+        android:id="@+id/afternoon_snack"
+        android:title="@string/afternoon_snack" />
+    <item
+        android:id="@+id/evening_snack"
+        android:title="@string/evening_snack" />
+</menu>

@@ -1,0 +1,136 @@
+<resources>
+    <string name="app_name">Diplov_V1</string>
+    <string name="name_app">Дневник здоровья</string>
+
+    <string name="bnv_food">Еда</string>
+    <string name="bnv_footSteps">Шагомер</string>
+    <string name="bnv_profile">Профиль</string>
+    <string name="bnv_more">Ещё</string>
+
+    <string name="breakfast">Завтрак</string>
+    <string name="lunch">Обед</string>
+    <string name="dinner">Ужин</string>
+    <string name="morning_snack">Утренний перекус</string>
+    <string name="afternoon_snack">Дневной перекус</string>
+    <string name="evening_snack">Вечерний перекус</string>
+    <string name="title_activity_profile">Профиль</string>
+    <string name="btnAddMeal">Добавить приём пищи</string>
+
+    <string name="Male">Мужской</string>
+    <string name="Female">Женский</string>
+
+    <string name="PersonalData">Ваши данные</string>
+    <string name="Name">Имя</string>
+    <string name="Sex">Пол</string>
+    <string name="Height">Рост, см</string>
+    <string name="Weight">Вес, кг</string>
+    <string name="Age">Возраст, лет</string>
+    <string name="ActivityLvl">Активность</string>
+    <string name="Raschet">Расчет суточной нормы калорий и БЖУ</string>
+    <string name="FormulaDlyaRascheta">Выберите формулу для расчёта</string>
+
+    <string name="Miffline">Миффлина - Сан Жеора</string>
+    <string name="Harrise">Харриса-Бенедикта</string>
+    <string name="Katch">Кэтча-МакАрдла</string>
+
+    <string name="Poxydenie">Похудение</string>
+    <string name="Podderjka">Поддержание текущего веса</string>
+    <string name="NaborMass">Набор массы</string>
+
+    <string name="Error_Formula"></string>
+    <string name="Error_BGU">Сумма БЖУ должна равняться 100%</string>
+    <string name="Error_data">Введите параметры в "Ваши данные"</string>
+    <string name="Error_FatPercent">Введите процент подкожного жира</string>
+    <string name="title_activity_eating">Выбор продукта</string>
+    <string name="All">Все</string>
+    <string name="MyProducts">Мои продукты</string>
+    <string name="Recent">Недавние</string>
+
+    <string name="Error_AlreadyExist">Продукт уже добавлен</string>
+
+    <string name="SearchProduct">Введите название продукта</string>
+    <string name="title_activity_product">Задать размер порции</string>
+
+    <string name="ProductWeight">Вес продукта, г</string>
+    <string name="ProductWeightEditText">Вес, г</string>
+
+    <string name="Calories">Калории:</string>
+    <string name="Protein">Белки:</string>
+    <string name="Fats">Жиры:</string>
+    <string name="Carb">Углеводы:</string>
+
+    <string name="CaloriesUnit">Калории, ккал</string>
+    <string name="ProteinUnit">Белки, г</string>
+    <string name="FatsUnit">Жиры, г</string>
+    <string name="CarbUnit">Углеводы, г</string>
+
+    <string name="ProductCalories"></string>
+
+    <string name="buttonAddProduct">Добавить продукт</string>
+    <string name="title_activity_list_nutrition">Журнал питания</string>
+
+    <string name="btnDone">Готово</string>
+
+    <string name="DeleteObject">Удалить объект?</string>
+    <string name="Delete">Удалить</string>
+    <string name="Cancel">Отмена</string>
+
+    <string name="title_activity_add_user_product">Добавить продукт</string>
+    <string name="txtAddProduct">Введите данные о продукте (100 г)</string>
+    <string name="ErrorProductName">Введите название продукта</string>
+    <string name="ErrorCalories">Введите количество калорий</string>
+
+    <string name="serving">Порция, г</string>
+    <string name="productName">Название\nпродукта</string>
+    <string name="title_activity_water">Счётчик воды</string>
+
+    <string name="WaterNorm">Норма воды, мл</string>
+    <string name="GlassVolume">Объём стакана, мл</string>
+    <string name="title_activity_water_settings">WaterSettings</string>
+    <string name="btnDrinkWater">Выпить воды</string>
+    <string name="btnSave">Сохранить</string>
+    <string name="ErrorWater">Укажите норму воды и объём стакана</string>
+    <string name="title_activity_step_counter">Шагомер</string>
+
+    <string name="StepsNorm">Норма шагов</string>
+    <string name="ErrorSteps">Укажите норму шагов</string>
+    <string name="title_activity_step_counter2">Шагомер</string>
+
+    <string name="Dist">Расстояние</string>
+    <string name="kcal">Калории</string>
+    <string name="title_activity_help">Помощь</string>
+
+    <string name="HelpProfile">1,2 –  минимальная активность (сидячий образ жизни при отсутствии тренировок);\n\n
+1,375 – небольшая активность (тренировки несколько раз в неделю, но малоподвижный образ жизни);\n\n
+1,46 – средняя активность (активный образ жизни при регулярных занятиях спортом);\n\n
+1,55 – активность выше среднего (интенсивные занятия спортом почти каждый день);\n\n
+1,64 – повышенная активность (ежедневные тренировки, физический труд);\n\n
+1,72 – высокая активность (ежедневные интенсивные тренировки, физический труд, ходьба в течение нескольких часов);\n\n
+1,9 – очень высокая активность (тренировки профессиональных спортсменов, тяжелый ежедневный физический труд).</string>
+
+
+    <string name="title_activity_statistics">Статистика</string>
+    <string name="PressToChangeDate">Коснитесь для изменения периода</string>
+
+    <string name="NutritionCard">Питание</string>
+    <string name="CPFC_All">КБЖУ за всё время:</string>
+    <string name="CPFC_Period">КБЖУ за период:</string>
+    <string name="CPFC_Average">Среднее КБЖУ за период:</string>
+
+    <string name="WeightCard">Вес</string>
+    <string name="WeightChangeTotal">Изменение веса за всё время:</string>
+    <string name="WeightChangePeriod">Изменение веса за период:</string>
+    <string name="WeightAVG">Средний вес за период:</string>
+    
+    <string name="StepsCard">Шаги</string>
+    <string name="StepsTotal">Количество шагов за всё время:</string>
+    <string name="StepsPeriod">Количество шагов за период:</string>
+
+    <string name="WaterCard">Вода</string>
+    <string name="WaterTotal">Выпито воды за всё время:</string>
+    <string name="WaterPeriod">Выпито воды за период:</string>
+
+    <string name="Hello">Привет</string>
+    <string name="fillProfile">Заполните профиль</string>
+
+</resources>

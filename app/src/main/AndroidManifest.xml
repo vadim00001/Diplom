@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Diplov_V1"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/name_app"
+            android:theme="@style/Theme.Diplov_V1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".StatisticsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_statistics"
+            android:theme="@style/Theme.Diplov_V1" />
+
+        <receiver android:name=".Receiver" />
+        <receiver
+            android:name=".BootCompletedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false"
+            android:label="@string/title_activity_help"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".StepCounter2"
+            android:exported="false"
+            android:label="@string/title_activity_step_counter2"
+            android:theme="@style/Theme.Diplov_V1" />
+
+        <service
+            android:name=".StepCounterService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <activity
+            android:name=".StepCounterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_step_counter"
+            android:theme="@style/Theme.Diplov_V1" />
+        <!--
+        <activity
+            android:name=".WaterSettings"
+            android:exported="false"
+            android:label="@string/title_activity_water_settings"
+            android:theme="@style/Theme.Diplov_V1" />
+        -->
+        <activity
+            android:name=".WaterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_water"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".AddUserProduct"
+            android:exported="false"
+            android:label="@string/title_activity_add_user_product"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".ListNutrition"
+            android:exported="false"
+            android:label="@string/title_activity_list_nutrition"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".ProductActivity"
+            android:exported="false"
+            android:label="@string/title_activity_product"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".EatingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_eating"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.Diplov_V1" />
+        <activity
+            android:name=".NutritionActivity"
+            android:exported="false"
+            android:label="@string/NutritionCard"
+            android:theme="@style/Theme.Diplov_V1" />
+    </application>
+
+</manifest>
