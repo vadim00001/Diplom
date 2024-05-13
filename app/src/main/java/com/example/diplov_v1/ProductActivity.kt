@@ -35,32 +35,20 @@ class ProductActivity : AppCompatActivity() {
         var productFatsNew = 0.0
         var productCarbNew = 0.0
 
-        //var flag = 0
-
-        //val flagCheck = intent.getIntExtra("flagCheck", 0)
         val productName = intent.getStringExtra("productName")!!
         var productWeight = intent.getIntExtra("productWeight", 100)
 
         val nutrName = intent.getStringExtra("nutrName")!!
         val date = intent.getStringExtra("date")!!
-        //val selectedIndex = intent.getIntExtra("selectedIndex", 0)
 
         var productInfo: Any
 
         lifecycleScope.launch(Dispatchers.IO) {
-/*
-            val productInfo =
-                productName?.let {
-                    database.productsDao()
-                        .getProductInfo(it)
-                }
-*/
             productInfo = database.productsDao().getProductInfo(productName)
             if (productInfo == null) {
                 productInfo =
                     database.listNutrDao().getProductInfo(nutrName, productName, date, date)
             }
-
             withContext(Dispatchers.Main) {
                 when (productInfo) {
                     is ProductsEntity -> {
@@ -69,7 +57,6 @@ class ProductActivity : AppCompatActivity() {
                         productCarbValue = (productInfo as ProductsEntity).carbohydrateValue
                         productKcalValue = (productInfo as ProductsEntity).kcalValue
                     }
-
                     is ListNutrEntity -> {
                         productProteinValue = (productInfo as ListNutrEntity).protein
                         productFatsValue = (productInfo as ListNutrEntity).fats
@@ -90,7 +77,6 @@ class ProductActivity : AppCompatActivity() {
         bg.btnDoneProduct.setOnClickListener()
         {
             val intent = Intent()
-            //intent.putExtra("flagToEating", flag)
             intent.putExtra("productNameToEating", productName)
             intent.putExtra("productWeightToEating", productWeight)
             intent.putExtra("productProteinValueToEating", productProteinNew)

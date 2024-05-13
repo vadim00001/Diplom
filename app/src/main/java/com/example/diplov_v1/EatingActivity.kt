@@ -119,7 +119,6 @@ class EatingActivity : AppCompatActivity() {
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
-                    //val flag = result.data?.getIntExtra("flagToEating", 0)
                     val productNameToListNutr = result.data?.getStringExtra("productNameToEating")
                     val productWeightToListNutr =
                         result.data?.getIntExtra("productWeightToEating", 0)
@@ -133,7 +132,6 @@ class EatingActivity : AppCompatActivity() {
                         result.data?.getDoubleExtra("productCarbValueToEating", 0.0)
 
                     val intent = Intent()
-                    //intent.putExtra("flagToListNutr", flag)
                     intent.putExtra("productNameToListNutr", productNameToListNutr)
                     intent.putExtra("productWeightToListNutr", productWeightToListNutr)
                     intent.putExtra("productKcalValueToListNutr", productKcalValueToListNutr)
@@ -167,7 +165,6 @@ class EatingActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         bottomSheetDialog.dismiss()
                         updateList(result)
-                        //Log.d("MyLog", result.toString())
                     }
                 }
             }
@@ -189,7 +186,6 @@ class EatingActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 updateList(result)
             }
-            // FIXME: "Тута"
         }
     }
 

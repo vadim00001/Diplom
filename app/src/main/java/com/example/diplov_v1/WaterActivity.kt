@@ -2,7 +2,6 @@ package com.example.diplov_v1
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
@@ -49,9 +48,7 @@ class WaterActivity : AppCompatActivity() {
         bg.btnDateBack.setOnClickListener { updateDateByOffset(-1) }
         bg.btnDateNext.setOnClickListener { updateDateByOffset(1) }
 
-        //bg.btnSave.setOnClickListener { btnSaveClick() }
         bg.btnDrinkWater.setOnClickListener { btnDrinkWaterClick() }
-        bg.btnDeleteWater.setOnClickListener { btnDeleteWaterData() }
 
         bg.listviewWater.setOnItemLongClickListener { _, _, position, _ ->
             val waterItem = bg.listviewWater.getItemAtPosition(position) as String
@@ -74,16 +71,11 @@ class WaterActivity : AppCompatActivity() {
                         bg.txtProgress.text = stringTxt
 
                         listWater.remove(waterItem)
-                        //adapter.notifyDataSetChanged()
                         adapter.remove(waterItem)
-                        //loadFromDB()
+
                         bottomSheetDialog.dismiss()
                     }
                 }
-
-
-                //saveToDb()
-                //loadFromDB()
             }
 
             btnCancel.setOnClickListener {
@@ -100,24 +92,6 @@ class WaterActivity : AppCompatActivity() {
             android.R.layout.simple_list_item_1,
             listWater
         )
-
-        //loadFromDB()
-    }
-
-    private fun btnSaveClick() {
-        if (bg.editTxtWaterNorm.text.isNullOrEmpty() || bg.editTxtGlassVolume.text.isNullOrEmpty()) {
-            Toast.makeText(this, getString(R.string.ErrorWater), Toast.LENGTH_SHORT).show()
-            return
-        }
-        waterNorm = bg.editTxtWaterNorm.text.toString().toInt()
-        glassVolume = bg.editTxtGlassVolume.text.toString().toInt()
-
-        bg.progressBar.max = waterNorm
-        val stringTxt = "$progress / $waterNorm"
-        bg.txtProgress.text = stringTxt
-        //bg.txtProgress.text = "$progress / $waterNorm "
-        //saveToDb()
-        saveToDb()
     }
 
     private fun btnDrinkWaterClick() {
@@ -128,7 +102,6 @@ class WaterActivity : AppCompatActivity() {
         waterNorm = bg.editTxtWaterNorm.text.toString().toInt()
         glassVolume = bg.editTxtGlassVolume.text.toString().toInt()
 
-        //calendar = Calendar.getInstance()
         val calendarTime = Calendar.getInstance()
         val currentTime = calendarTime.time
         val formatter = SimpleDateFormat("HH:mm:ss")
@@ -142,16 +115,9 @@ class WaterActivity : AppCompatActivity() {
         bg.progressBar.progress = progress
         val stringTxt = "$progress / $waterNorm"
         bg.txtProgress.text = stringTxt
-        //bg.txtProgress.text = "$progress / $waterNorm"
         bg.listviewWater.adapter = adapter
 
         saveToDb()
-    }
-
-    private fun btnDeleteWaterData() {
-        Thread {
-            database.waterCounterDao().deleteAllWater()
-        }.start()
     }
 
     private fun saveToDb() {
@@ -166,14 +132,6 @@ class WaterActivity : AppCompatActivity() {
 
         Thread {
             database.waterCounterDao().insert(data)
-            Log.d("MyLog", database.waterCounterDao().getWaterData().toString())
-        }.start()
-    }
-
-    private fun updateWaterNormAndGlassVolume() {
-        Thread {
-            database.waterCounterDao()
-                .updateWaterNormAndGlassVolume(waterNorm, glassVolume, date, date)
         }.start()
     }
 
@@ -191,12 +149,7 @@ class WaterActivity : AppCompatActivity() {
                 if (waterData.isNotEmpty()) {
                     waterNorm = waterData.last().waterNorm
                     glassVolume = waterData.last().glassVolume
-                    //progress = waterData.last().progress
                     waterData.forEach { progress += it.glassVolume }
-                    /*
-                                        listWater =
-                                            waterData.map { "${it.time} - ${it.volume} мл" } as ArrayList<String>
-                    */
 
                     listWater = waterData.map { it.waterItem } as ArrayList<String>
 
@@ -228,28 +181,6 @@ class WaterActivity : AppCompatActivity() {
         }
     }
 
-    /*
-        //Шо бы кнопка была
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.menu_settings, menu)
-            return true
-        }
-
-        //Шо бы кнопка работала
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.settings -> openWaterSettings()
-            }
-            return true
-        }
-
-        private fun openWaterSettings() {
-            val intent = Intent(this, WaterSettings::class.java)
-            launcher?.launch(intent)
-        }
-    */
-
-
     private fun showDatePicker() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -269,10 +200,6 @@ class WaterActivity : AppCompatActivity() {
     private fun handleSelectedDate(year: Int, month: Int, dayOfMonth: Int) {
         calendar.set(year, month, dayOfMonth)
         updateCurrentDate(bg.txtDate)
-
-        val selectedDate = "$dayOfMonth/${month + 1}/$year"
-
-        //loadFromDB()
     }
 
     private fun updateCurrentDate(textView: TextView) {
@@ -285,12 +212,10 @@ class WaterActivity : AppCompatActivity() {
         date = formatter.format(time)
 
         loadFromDB()
-
     }
 
     private fun updateDateByOffset(offset: Int) {
         calendar.add(Calendar.DAY_OF_MONTH, offset)
         updateCurrentDate(bg.txtDate)
-        //loadFromDB()
     }
 }

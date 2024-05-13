@@ -11,14 +11,6 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Entity(tableName = "Test")
-data class TestEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
-    @ColumnInfo(name = "test")
-    var test: String
-)
-
 @Entity(tableName = "Products")
 data class ProductsEntity(
     @PrimaryKey(autoGenerate = true)
@@ -43,6 +35,10 @@ data class ProductsEntity(
 data class ListNutrEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
+    @ColumnInfo(name = "idProduct")
+    var idProduct: Int,
+    @ColumnInfo(name = "idProfile")
+    var idProfile: Int,
     @ColumnInfo(name = "nutrName")
     var nutrName: String,
     @ColumnInfo(name = "date")
@@ -59,24 +55,6 @@ data class ListNutrEntity(
     var fats: Double,
     @ColumnInfo(name = "carb")
     var carb: Double
-)
-
-@Entity(tableName = "listNutrTotal")
-data class ListNutrTotalEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
-    @ColumnInfo(name = "nutrName")
-    var nutrName: String,
-    @ColumnInfo(name = "time")
-    var time: Int,
-    @ColumnInfo(name = "kcalTotal")
-    var kcalTotal: Int,
-    @ColumnInfo(name = "proteinTotal")
-    var proteinTotal: Int,
-    @ColumnInfo(name = "fatsTotal")
-    var fatsTotal: Int,
-    @ColumnInfo(name = "carbTotal")
-    var carbTotal: Int
 )
 
 @Entity(tableName = "Profile")
@@ -97,8 +75,6 @@ data class ProfileEntity(
     var age: Double,
     @ColumnInfo(name = "activityLvlId")
     var activityLvlId: Int,
-    @ColumnInfo(name = "avatar")
-    var avatar: String,
     @ColumnInfo(name = "kcal")
     var kcal: Double,
     @ColumnInfo(name = "protein")
@@ -141,14 +117,21 @@ data class StepsCounterEntity(
     var stepCountEnd: Int
 )
 
-@Dao
-interface TestDao {
-    @Insert
-    fun insert(data: TestEntity)
-
-    @Query("SELECT * FROM test")
-    fun getAllData(): List<TestEntity>
-}
+@Entity(tableName = "HealthIndicators")
+data class HealthIndicatorsEntity(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null,
+    @ColumnInfo(name = "idProfile")
+    var idProfile: Int,
+    @ColumnInfo(name = "date")
+    var date: String,
+    @ColumnInfo(name = "time")
+    var time: String,
+    @ColumnInfo(name = "indicator")
+    var indicator: String,
+    @ColumnInfo(name = "items")
+    var items: String
+)
 
 @Dao
 interface ProductsDao {
@@ -170,11 +153,9 @@ interface ProductsDao {
     @Query("SELECT * FROM Products")
     fun getAllProducts(): List<ProductsEntity>
 
-    //здесь было suspend fun
     @Query("SELECT * FROM Products WHERE productName = :productName")
     fun getProductInfo(productName: String): ProductsEntity
 
-    //здесь было suspend fun
     @Query("SELECT * FROM Products WHERE productName LIKE :query")
     fun search(query: String): List<ProductsEntity>
 }
@@ -187,7 +168,6 @@ interface ListNutrDao {
     @Query("SELECT * FROM listsnutrition")
     fun getAllData(): List<ListNutrEntity>
 
-    //Получить приёмы пищи
     @Query("SELECT * FROM listsnutrition WHERE date BETWEEN :startDate AND :endDate")
     fun getDayData(startDate: String, endDate: String): List<ListNutrEntity>
 
@@ -222,29 +202,9 @@ interface ListNutrDao {
         endDate: String
     )
 
-    @Query("DELETE FROM listsnutrition")
-    fun deleteAllData()
+    @Query("DELETE FROM listsnutrition WHERE nutrName = :nutrName AND date BETWEEN :startDate AND :endDate")
+    fun deleteNutrition(nutrName: String, startDate: String, endDate: String)
 }
-
-/*
-@Dao
-interface ListNutrTotalDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOrUpdateData(entity: ListNutrTotalEntity)
-
-    @Query("SELECT * FROM listNutrTotal WHERE nutrName = :nutrName")
-    fun getByColumnName(nutrName: String): ListNutrTotalEntity?
-
-        @Update
-        fun update(entity: ListNutrTotalEntity)
-
-    @Query("SELECT * FROM listNutrTotal")
-    fun getAllData(): List<ListNutrTotalEntity>
-
-    @Query("DELETE FROM listnutrtotal")
-    fun deleteAllData()
-}
-*/
 
 @Dao
 interface ProfileDao {
@@ -263,14 +223,6 @@ interface WaterCounterDao {
     @Insert
     fun insert(data: WaterCounterEntity)
 
-    @Query("UPDATE WaterCounter SET waterNorm = :waterNorm, glassVolume = :glassVolume WHERE date BETWEEN :startDate AND :endDate")
-    fun updateWaterNormAndGlassVolume(
-        waterNorm: Int,
-        glassVolume: Int,
-        startDate: String,
-        endDate: String
-    )
-
     @Query("SELECT * FROM WaterCounter WHERE date BETWEEN :startDate AND :endDate")
     fun getDayData(startDate: String, endDate: String): List<WaterCounterEntity>
 
@@ -282,9 +234,6 @@ interface WaterCounterDao {
 
     @Query("DELETE FROM WaterCounter WHERE waterItem = :waterItem AND date BETWEEN :startDate AND :endDate")
     fun deleteItem(waterItem: String, startDate: String, endDate: String)
-
-    @Query("DELETE FROM WaterCounter")
-    fun deleteAllWater()
 }
 
 @Dao
@@ -306,35 +255,47 @@ interface StepsCounterDao {
         endDate: String
     )
 
+    @Query("UPDATE StepsCounter SET stepCountStart = :stepCountStart WHERE date BETWEEN :startDate AND :endDate")
+    fun updateStepCountStart(
+        stepCountStart: Int,
+        startDate: String,
+        endDate: String
+    )
+
     @Query("SELECT * FROM StepsCounter")
     fun getStepsData(): List<StepsCounterEntity>
 
     @Query("SELECT * FROM StepsCounter WHERE date BETWEEN :startDate AND :endDate")
     fun getDayData(startDate: String, endDate: String): List<StepsCounterEntity>
+}
 
-    @Query("DELETE FROM StepsCounter")
-    fun deleteStepsData()
+@Dao
+interface HealthIndicatorsDao {
+    @Insert
+    fun insert(data: HealthIndicatorsEntity)
 
-    @Query("DELETE FROM StepsCounter WHERE id = (SELECT MAX(id) FROM StepsCounter)")
-    fun deleteLastNote()
+    @Query("SELECT * FROM HealthIndicators WHERE indicator = :indicator AND date BETWEEN :startDate AND :endDate")
+    fun getDayData(
+        indicator: String,
+        startDate: String,
+        endDate: String
+    ): List<HealthIndicatorsEntity>
+
+    @Query("DELETE FROM HealthIndicators WHERE items = :item AND date BETWEEN :startDate AND :endDate")
+    fun deleteItem(item: String, startDate: String, endDate: String)
 }
 
 @Database(
-    entities = [ProductsEntity::class, ProfileEntity::class, ListNutrEntity::class, WaterCounterEntity::class, StepsCounterEntity::class, TestEntity::class],
+    entities = [ProductsEntity::class, ProfileEntity::class, ListNutrEntity::class, WaterCounterEntity::class, StepsCounterEntity::class, HealthIndicatorsEntity::class],
     version = 1
 )
 abstract class Db : RoomDatabase() {
-    abstract fun testDao(): TestDao
-
     abstract fun productsDao(): ProductsDao
-
-    //abstract fun userProductsDao(): UserProductsDao
     abstract fun profileDao(): ProfileDao
     abstract fun listNutrDao(): ListNutrDao
-
-    //abstract fun listNutrTotalDao(): ListNutrTotalDao
     abstract fun waterCounterDao(): WaterCounterDao
     abstract fun stepsCounterDao(): StepsCounterDao
+    abstract fun healthIndicators(): HealthIndicatorsDao
 
     companion object {
         private var INSTANCE: Db? = null
@@ -347,7 +308,7 @@ abstract class Db : RoomDatabase() {
                         Db::class.java,
                         "Database.db"
                     )
-                        .createFromAsset("databaseV5.db")
+                        .createFromAsset("database.db")
                         .build()
                 }
             }

@@ -35,7 +35,6 @@ class ProfileActivity : AppCompatActivity() {
     private var weight: Double = 0.0
     private var age: Double = 0.0
     private var activityLvlId: Int = 0
-    private var avatar: String = ""
     private var kcal: Double = 0.0
     private var protein: Double = 0.0
     private var fats: Double = 0.0
@@ -45,7 +44,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var radioButton2: RadioButton
 
     private var launcherHelp: ActivityResultLauncher<Intent>? = null
-    private var launcherAvatar: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +58,6 @@ class ProfileActivity : AppCompatActivity() {
         val time = calendar.time
         date = formatter.format(time)
 
-        bg.imageView.setImageResource(R.drawable.avatar)
         setupSpinner(bg.spinActivLvl, R.array.ActiveLvl)
         setupSpinner(bg.spinFormula, R.array.Formula)
         setupSpinner(bg.spinGoal, R.array.Goal)
@@ -79,20 +76,6 @@ class ProfileActivity : AppCompatActivity() {
         launcherHelp =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
-                }
-            }
-
-        bg.imageView.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            launcherAvatar?.launch(intent)
-        }
-
-        launcherAvatar =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == RESULT_OK) {
-                    val selectedImage = result.data?.data
-                    bg.imageView.setImageURI(selectedImage)
                 }
             }
 
@@ -163,7 +146,6 @@ class ProfileActivity : AppCompatActivity() {
             weight,
             age,
             activityLvlId,
-            avatar,
             kcal,
             protein,
             fats,
@@ -172,24 +154,8 @@ class ProfileActivity : AppCompatActivity() {
 
         Thread {
             database.profileDao().insert(profileData)
-            //Log.d("MyLog", database.profileDao().getProfileData().toString())
         }.start()
-
-        /*
-                Thread {
-                    val insertId = database.profileDao().insertData(profileData)
-                    if (insertId == -1L)
-                        database.profileDao().update(profileData)
-
-                }.start()
-        */
     }
-
-    /*
-        private fun setupImageView() {
-            bg.imageView.setImageResource(R.drawable.avatar)
-        }
-    */
 
     private fun setupSpinner(spinner: Spinner, arrayResId: Int) {
         val array = resources.getStringArray(arrayResId)
@@ -204,17 +170,6 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.Error_data), Toast.LENGTH_SHORT).show()
             return
         }
-        //gender = -1.0
-
-        /*            val selectedRadioButtonId: Int = bg.radioGender.checkedRadioButtonId
-                    val selectedRadioButton: RadioButton = findViewById(selectedRadioButtonId)
-                    if (selectedRadioButton.text == getString(R.string.Female)) gender = 1
-
-                    height = bg.editTxtHeight.text.toString().toDouble()
-                    weight = bg.editTxtWeight.text.toString().toDouble()
-                    age = bg.editTxtAge.text.toString().toDouble()*/
-
-        //val activityLvlValue = bg.spinActivLvl.selectedItem.toString().toDouble()
 
         val selectedRadioButtonId: Int = bg.radioGender.checkedRadioButtonId
         val selectedRadioButton: RadioButton = findViewById(selectedRadioButtonId)
@@ -238,36 +193,11 @@ class ProfileActivity : AppCompatActivity() {
             else -> -1.0
         }
 
-        /*
-                val formula = when (bg.spinFormula.selectedItemId) {
-                    getString(R.string.Miffline) -> 0
-                    getString(R.string.Harrise) -> 1
-                    getString(R.string.Katch) -> 2
-                    else -> -1
-                }
-        */
-
         val formula = bg.spinFormula.selectedItemId
 
         val percentOfFat = bg.editTxtFatPercent.text
 
-        /*
-                val goal = when (bg.spinGoal.selectedItem) {
-                    getString(R.string.Poxydenie) -> 0
-                    getString(R.string.Podderjka) -> 1
-                    getString(R.string.NaborMass) -> 2
-                    else -> -1
-                }
-        */
-
         val goal = bg.spinGoal.selectedItemId
-
-
-        //saveProfile()
-
-        //var caloriesNorm = 0.0
-        //var caloriesDef = 0.0
-        //var caloriesProf = 0.0
 
         kcal = when (formula) {
             0L -> {
@@ -301,6 +231,11 @@ class ProfileActivity : AppCompatActivity() {
 
         kcal *= activityLvlValue
 
+        if (bg.editTxtProtein.text.isNullOrEmpty() || bg.editTxtFat.text.isNullOrEmpty() || bg.editTxtCarb.text.isNullOrEmpty()) {
+            Toast.makeText(this, getString(R.string.Error_BGU_Empty), Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val proteinEdit = bg.editTxtProtein.text.toString().toInt()
         val fatsEdit = bg.editTxtFat.text.toString().toInt()
         val carbEdit = bg.editTxtCarb.text.toString().toInt()
@@ -318,22 +253,19 @@ class ProfileActivity : AppCompatActivity() {
 
             if (percent != null) {
                 if (goal == 1L) {
-                    //caloriesDef = kcal - kcal * percent / 100.0
                     kcal -= kcal * percent / 100.0
                 } else {
-                    //caloriesProf = kcal + kcal * percent / 100.0
                     kcal += kcal * percent / 100.0
                 }
             } else {
                 kcal *= if (goal == 1L) {
-                    //caloriesDef = kcal * 0.9
                     0.9
                 } else {
-                    //caloriesProf = kcal * 1.1
                     1.1
                 }
             }
         }
+
         bg.txtCaloriesResult.text = kcal.roundToInt().toString()
 
         protein = (kcal * proteinEdit / 100) / 4
@@ -346,28 +278,5 @@ class ProfileActivity : AppCompatActivity() {
         bg.txtCarbResult.text = carb.roundToInt().toString()
 
         saveToDb()
-        /*
-                val profileData = ProfileEntity(
-                    1,
-                    name,
-                    gender,
-                    height.roundToInt(),
-                    weight.roundToInt(),
-                    age.roundToInt(),
-                    activityLvlId,
-                    avatar,
-                    kcal.roundToInt(),
-                    protein.roundToInt(),
-                    fats.roundToInt(),
-                    carb.roundToInt(),
-                )
-
-                Thread {
-                    val insertId = database.profileDao().insertData(profileData)
-                    if (insertId == -1L)
-                        database.profileDao().update(profileData)
-
-                }.start()
-        */
     }
 }

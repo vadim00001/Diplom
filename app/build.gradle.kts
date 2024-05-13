@@ -9,7 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.diplov_v1"
+        applicationId = "com.example.HealthDiary"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -53,7 +53,6 @@ android {
 
 dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.room:room-ktx:2.6.1")

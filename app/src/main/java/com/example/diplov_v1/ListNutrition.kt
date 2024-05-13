@@ -21,14 +21,12 @@ class ListNutrition : AppCompatActivity() {
 
     private lateinit var database: Db
 
-    //private var productList: MutableList<String>? = null
     private var listProducts: ArrayList<String> = ArrayList()
     private lateinit var adapter: ArrayAdapter<String>
 
     private var launcher: ActivityResultLauncher<Intent>? = null
     private var launcherEdit: ActivityResultLauncher<Intent>? = null
 
-    //private var flag: Int = 0
     private var nutrName: String = ""
     private var productName: String = ""
     private var productWeightValue: Int = 0
@@ -59,10 +57,8 @@ class ListNutrition : AppCompatActivity() {
 
         bg.floatingActionButton.setOnClickListener {
             val intent = Intent(this, EatingActivity::class.java)
-
             intent.putExtra("nutrName", nutrName)
             intent.putExtra("date", date)
-
             launcher?.launch(intent)
         }
 
@@ -89,70 +85,34 @@ class ListNutrition : AppCompatActivity() {
                         result.data?.getDoubleExtra("productCarbValueToListNutr", 0.0)!!
                     sumProductsCarbValue += productCarbValue
 
-                    //val productData: String = "$productName\t\t$productKcalValue/$productProteinValue/$pro"
                     listProducts.add(productName)
                     adapter.add(listProducts.last())
                     bg.listView.adapter = adapter
 
                     updateCountProduct()
                     saveProductToDb()
-                    //saveTotalToDb()
-                    //loadNutrFromDb()
                     setTxtViewText()
                 }
-                /*
-                                if (result.resultCode == RESULT_CANCELED) {
-
-                                }
-                */
             }
 
         bg.btnDone.setOnClickListener {
             val intent = Intent()
             setResult(RESULT_OK, intent)
             finish()
-
-            /*
-                        saveTotalToDb()
-
-                        Thread {
-                            val dataListNutr = database.listNutrDao().getAllData()
-                            val dataListNutrTotal = database.listNutrTotalDao().getAllData()
-                            Log.d("MyLog", dataListNutr.toString())
-                            Log.d("MyLog", dataListNutrTotal.toString())
-
-                        }.start()
-
-            */
         }
-
-        bg.btnDelete.setOnClickListener {
-            Thread {
-                database.listNutrDao().deleteAllData()
-            }.start()
-        }
-
 
         bg.listView.setOnItemClickListener { _, _, position, _ ->
             productName = bg.listView.getItemAtPosition(position) as String
             lifecycleScope.launch(Dispatchers.IO) {
                 val productInfo =
                     database.listNutrDao().getProductInfo(nutrName, productName, date, date)
-                //if (productInfo.flag == 1) flag = 1
-                //else flag = 0
                 withContext(Dispatchers.Main) {
                     val productWeight = productInfo.weight
                     val intent = Intent(this@ListNutrition, ProductActivity::class.java)
-                    //intent.putExtra("flagCheck", flag)
                     intent.putExtra("productName", productName)
                     intent.putExtra("productWeight", productWeight)
-
-
                     intent.putExtra("nutrName", nutrName)
                     intent.putExtra("date", date)
-
-
-
                     launcherEdit?.launch(intent)
                 }
             }
@@ -171,7 +131,6 @@ class ListNutrition : AppCompatActivity() {
                             sumProductsFatsValue -= productInfo.fats
                             sumProductsCarbValue -= productInfo.carb
 
-                            //productName = result.data?.getStringExtra("productNameToEating")!!
                             productWeightValue =
                                 result.data?.getIntExtra("productWeightToEating", 0)!!
                             productKcalValue =
@@ -204,17 +163,13 @@ class ListNutrition : AppCompatActivity() {
                                         date,
                                         date
                                     )
-                                //Log.d("MyLog", database.listNutrDao().getAllData().toString())
                             }.start()
-
-                            //saveTotalToDb()
                             setTxtViewText()
                         }
                     }
                 }
             }
 
-        //УДАЛЕНИЕ
         bg.listView.setOnItemLongClickListener { _, _, position, _ ->
             productName = bg.listView.getItemAtPosition(position) as String
 
@@ -230,7 +185,6 @@ class ListNutrition : AppCompatActivity() {
                     val productInfo =
                         database.listNutrDao().getProductInfo(nutrName, productName, date, date)
                     database.listNutrDao().deleteProduct(nutrName, productName, date, date)
-                    //Log.d("MyLog", database.listNutrDao().getAllData().toString())
                     withContext(Dispatchers.Main) {
                         bottomSheetDialog.dismiss()
 
@@ -242,8 +196,6 @@ class ListNutrition : AppCompatActivity() {
                         sumProductsProteinValue -= productInfo.protein
                         sumProductsFatsValue -= productInfo.fats
                         sumProductsCarbValue -= productInfo.carb
-
-                        //saveTotalToDb()
 
                         setTxtViewText()
                     }
@@ -270,79 +222,17 @@ class ListNutrition : AppCompatActivity() {
         }.start()
     }
 
-    /*
-        private fun saveTotalToDb() {
-            val listNutrTotal = ListNutrTotalEntity(
-                null,
-                nutrName,
-                10,
-                sumProductsKcalValue.roundToInt(),
-                sumProductsProteinValue.roundToInt(),
-                sumProductsFatsValue.roundToInt(),
-                sumProductsCarbValue.roundToInt()
-            )
-
-            */
-    /*
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val insertId = database.listNutrTotalDao().insertData(listNutrTotal)
-                            if (insertId == -1L)
-                                database.listNutrTotalDao().update(listNutrTotal)
-                        }
-            *//*
-
-
-        Thread {
-            val exist = database.listNutrTotalDao().getByColumnName(nutrName)
-            if (exist == null) {
-                database.listNutrTotalDao().insertOrUpdateData(listNutrTotal)
-            } else {
-                listNutrTotal.id = exist.id
-                database.listNutrTotalDao().insertOrUpdateData(listNutrTotal)
-            }
-        }.start()
-
-    }
-*/
-
-    /*
-        lifecycleScope.launch(Dispatchers.IO)
-        {
-            val productInfo = productName?.let {
-                database.productsDao()
-                    .getProductInfo(it)
-            }
-            withContext(Dispatchers.Main) {
-                if (productInfo != null) {
-                    productKcalValue = productInfo.kcalValue
-                    productProteinValue = productInfo.proteinValue
-                    productFatsValue = productInfo.fatValue
-                    productCarbValue = productInfo.carbohydrateValue
-
-                    bg.txtProductName.text = productName
-                    bg.txtProductCalories.text = productKcalValue.toInt().toString()
-                    bg.txtProductProtein.text = productProteinValue.toInt().toString()
-                    bg.txtProductFats.text = productFatsValue.toInt().toString()
-                    bg.txtProductCarb.text = productCarbValue.toInt().toString()
-                    bg.editTxtProductWeight.setText("100")
-                }
-            }
-        }
-    */
-
     private fun loadFromDb() {
         lifecycleScope.launch(Dispatchers.IO) {
             val data = database.listNutrDao().getNutrNameProducts(nutrName, date, date)
             withContext(Dispatchers.Main) {
                 val productNames = data.map { it.productName }
-                //val productDetails = data.map { listOf(it.productName, "К", it.kcal.roundToInt(), it.protein.roundToInt(), it.fats.roundToInt(), it.carb.roundToInt()).joinToString(separator = "\t\t") }
                 adapter = ArrayAdapter<String>(
                     this@ListNutrition,
                     android.R.layout.simple_list_item_1,
                     productNames
                 )
                 bg.listView.adapter = adapter
-
 
                 data.forEach {
                     sumProductsKcalValue += it.kcal
@@ -354,76 +244,13 @@ class ListNutrition : AppCompatActivity() {
                 setTxtViewText()
             }
         }
-
-
-        /*
-                CoroutineScope(Dispatchers.Main).launch {
-                    val data = withContext(Dispatchers.IO) {
-                        database.listNutrDao().getNutrNameProducts(nutrName)
-                    }
-
-                    val productNames = data.map { it.productName }
-                    adapter = ArrayAdapter<String>(
-                        this@ListNutrition,
-                        android.R.layout.simple_list_item_1,
-                        productNames
-                    )
-                    bg.listView.adapter = adapter
-
-                    data.forEach {
-                        sumProductsKcalValue += it.kcal
-                        sumProductsProteinValue += it.protein
-                        sumProductsFatsValue += it.fats
-                        sumProductsCarbValue += it.carb
-                    }
-
-                    setTxtViewText()
-                }
-        */
-
-        /*
-                lifecycleScope.launch {
-                    val data = database.listNutrDao().getNutrNameProducts(nutrName)
-                    val productNames =
-                        data.map { it.productName }
-                    withContext(Dispatchers.Main) {
-                        val adapter: ArrayAdapter<String> = ArrayAdapter(
-                            this@ListNutrition,
-                            android.R.layout.simple_list_item_1,
-                            productNames
-                        )
-                        bg.listView.adapter = adapter
-
-                        val kcalSaved = data.map { it.kcal }
-                        kcalSaved.forEach {
-                            sumProductsKcalValue += it
-                        }
-
-                        val proteinSaved = data.map { it.protein }
-                        proteinSaved.forEach {
-                            sumProductsProteinValue += it
-                        }
-
-                        val fatsSaved = data.map { it.fats }
-                        fatsSaved.forEach {
-                            sumProductsFatsValue += it
-                        }
-
-                        val carbSaved = data.map { it.carb }
-                        carbSaved.forEach {
-                            sumProductsCarbValue += it
-                        }
-
-
-                        setTxtViewText()
-                    }
-                }
-        */
     }
 
     private fun saveProductToDb() {
         val productInfo = ListNutrEntity(
             null,
+            0,
+            0,
             nutrName,
             date,
             productName,
@@ -433,12 +260,6 @@ class ListNutrition : AppCompatActivity() {
             productFatsValue,
             productCarbValue
         )
-
-        /*
-                lifecycleScope.launch(Dispatchers.IO) {
-                    database.listNutrDao().insertData(productInfo)
-                }
-        */
 
         Thread {
             database.listNutrDao().insertData(productInfo)
@@ -451,40 +272,4 @@ class ListNutrition : AppCompatActivity() {
         bg.txtFatsValue.text = "\t\tЖиры: ${sumProductsFatsValue.roundToInt()} г"
         bg.txtCarbValue.text = "\t\tУглеводы: ${sumProductsCarbValue.roundToInt()} г"
     }
-
-    /*
-        private fun addProduct() {
-
-            */
-    /*
-                    val productName = intent.getStringExtra("productName")
-                    val productKcalValue = intent.getDoubleExtra("productKcalValue", 0.0)
-                    val productProteinValue = intent.getDoubleExtra("productProteinValue", 0.0)
-                    val productFatsValue = intent.getDoubleExtra("productFatsValue", 0.0)
-                    val productCarbValue = intent.getDoubleExtra("productCarbValue", 0.0)
-            *//*
-
-
-
-        if (productList == null) {
-            productList = mutableListOf()
-        }
-
-        productName?.let {
-            productList?.add(it)
-        }
-
-        productList?.let { productList ->
-            val adapter = ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                productList
-            )
-            bg.listView.adapter = adapter
-        }
-
-
-    }
-*/
-
 }

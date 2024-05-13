@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Diplov_V1</string>
+    <string name="app_name">HealthDiary</string>
     <string name="name_app">Дневник здоровья</string>
 
     <string name="bnv_food">Еда</string>
@@ -7,6 +7,7 @@
     <string name="bnv_profile">Профиль</string>
     <string name="bnv_more">Ещё</string>
 
+    <string name="back">Назад</string>
     <string name="breakfast">Завтрак</string>
     <string name="lunch">Обед</string>
     <string name="dinner">Ужин</string>
@@ -39,6 +40,7 @@
 
     <string name="Error_Formula"></string>
     <string name="Error_BGU">Сумма БЖУ должна равняться 100%</string>
+    <string name="Error_BGU_Empty">Введите соотношение БЖУ</string>
     <string name="Error_data">Введите параметры в "Ваши данные"</string>
     <string name="Error_FatPercent">Введите процент подкожного жира</string>
     <string name="title_activity_eating">Выбор продукта</string>
@@ -121,7 +123,7 @@
     <string name="WeightChangeTotal">Изменение веса за всё время:</string>
     <string name="WeightChangePeriod">Изменение веса за период:</string>
     <string name="WeightAVG">Средний вес за период:</string>
-    
+
     <string name="StepsCard">Шаги</string>
     <string name="StepsTotal">Количество шагов за всё время:</string>
     <string name="StepsPeriod">Количество шагов за период:</string>
@@ -132,5 +134,25 @@
 
     <string name="Hello">Привет</string>
     <string name="fillProfile">Заполните профиль</string>
+
+    <string name="title_activity_health_indicators">Показатели здоровья</string>
+    <string name="FatProcentCalculate">Расчет процента подкожного жира</string>
+    <string name="Neck">Обхват шеи, см</string>
+    <string name="Waist">Обхват талии, см</string>
+    <string name="Hips">Обхват бёдер, см</string>
+    <string name="forWomen">(Для женщин)</string>
+    <string name="ErrorDataHealth">Введите данные</string>
+    <string name="title_activity_health_fat_procent">Добавление данных</string>
+    <string name="Glucose">Уровень сахара в крови</string>
+    <string name="GlucoseValue">Введите уровень сахара</string>
+
+    <string name="GlucoseBeforeFood">До еды</string>
+    <string name="GlucoseAfterFood">После еды</string>
+    <string name="NightGlucose">Ночное время</string>
+    
+    <string name="Pressure">Артериальное давление</string>
+    <string name="PressureSist">Систолическое</string>
+    <string name="PressureDiast">Диастолическое</string>
+    <string name="Pulse">Пульс</string>
 
 </resources>

@@ -155,15 +155,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btnDeleteUserProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Удалить\nмои продукты"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView45"
         android:layout_width="wrap_content"

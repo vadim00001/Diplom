@@ -35,9 +35,8 @@ fun setWorkRequestForNextDay(context: Context) {
     val current = Calendar.getInstance()
     val nextDay = Calendar.getInstance().apply {
         add(Calendar.DAY_OF_YEAR, 1)
-        //add(Calendar.MINUTE, 15)
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
+        set(Calendar.HOUR_OF_DAY, 23)
+        set(Calendar.MINUTE, 59)
         set(Calendar.SECOND, 0)
     }
     val delay = nextDay.timeInMillis - current.timeInMillis
@@ -50,10 +49,15 @@ fun setWorkRequestForNextDay(context: Context) {
     Log.d("MyLog", "WorkerExist")
 }
 
-class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams),
+    SensorEventListener {
     private var stepCountAtStartOfDay: Int = 0
-    private var currentSteps: Int = 0
+    private var currentStepCount: Int = 0
     private var stepsNorm: Int = 5000
+
+    private lateinit var sensorManager: SensorManager
+    private var stepCounterSensor: Sensor? = null
+
 
     private var date: String = ""
     private lateinit var database: Db
@@ -70,36 +74,58 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
 
         database = Db.getDb(applicationContext)
 
-        Thread {
-            try {
-                stepsNorm =
-                    database.stepsCounterDao().getDayData(dateBack, dateBack).last().stepsNorm
-                currentSteps =
-                    database.stepsCounterDao().getDayData(dateBack, dateBack).last().stepCountEnd
 
-                stepCountAtStartOfDay = currentSteps
-                val data = StepsCounterEntity(
-                    null,
-                    date,
-                    0,
-                    stepsNorm,
-                    stepCountAtStartOfDay,
-                    currentSteps
-                )
+        //updateCurrentSteps()
+        //Log.d("MyLog", currentStepCount.toString())
 
-                database.stepsCounterDao().insert(data)
+        /*
+                Thread {
+                    try {
+                        stepsNorm =
+                            database.stepsCounterDao().getDayData(dateBack, dateBack).last().stepsNorm
+                        currentSteps =
+                            database.stepsCounterDao().getDayData(dateBack, dateBack).last().stepCountEnd
 
-                Log.d("MyLog", "Воркер сработал")
+                        stepCountAtStartOfDay = currentSteps
+                        val data = StepsCounterEntity(
+                            null,
+                            date,
+                            0,
+                            stepsNorm,
+                            stepCountAtStartOfDay,
+                            currentSteps
+                        )
 
-            } catch (e: Exception) {
-            }
-        }.start()
+                        database.stepsCounterDao().insert(data)
+
+                        Log.d("MyLog", "Воркер сработал")
+
+                    } catch (_: Exception) {
+                    }
+                }.start()
+        */
 
 
         return Result.success()
     }
 
+    private fun updateCurrentSteps() {
+        Thread {
+            database.stepsCounterDao().updateCurrentSteps(currentStepCount, date, date)
+        }.start()
+    }
+
     private fun saveToDb() {
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        currentStepCount = event!!.values[0].toInt()
+        updateCurrentSteps()
+        Log.d("MyLog", currentStepCount.toString())
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("Not yet implemented")
     }
 }
 
@@ -114,6 +140,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var launcher: ActivityResultLauncher<Intent>? = null
 
     private var date: String = ""
+    private var dateBack: String = ""
     private var name: String = ""
     private var weight: Double = 0.0
     private var caloriesNow: Double = 0.0
@@ -122,8 +149,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var stepsNow: Int = 0
     private var stepCountAtStartOfDay: Int = 0
     private var currentStepCount: Int = 0
-
-    //private var totalSteps: Int = 0
     private var stepsNorm: Int = 5000
 
     private var waterNorm: Int = 2000
@@ -133,8 +158,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         bg = MainBinding.inflate(layoutInflater)
         setContentView(bg.root)
-
-        //setWorkRequestForNextDay(this)
 
         supportActionBar?.title = getString(R.string.name_app)
         name = getString(R.string.fillProfile)
@@ -146,21 +169,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         getPermission()
 
-
-        bg.btnDeleteStepsData.setOnClickListener {
-            Thread {
-                database.stepsCounterDao().deleteStepsData()
-            }.start()
-            loadFromDb()
-        }
-
         val calendar = Calendar.getInstance()
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val time = calendar.time
         date = formatter.format(time)
 
-
-        //updateCurrentDate(bg.txtDate)
+            //setWorkRequestForNextDay(this)
 
         bg.cvProfile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
@@ -173,7 +187,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         bg.cvSteps.setOnClickListener {
-            val intent = Intent(this, StepCounter2::class.java)
+            val intent = Intent(this, StepCounter::class.java)
             launcher?.launch(intent)
         }
 
@@ -187,6 +201,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             launcher?.launch(intent)
         }
 
+        bg.cvHealth.setOnClickListener {
+            val intent = Intent(this, HealthIndicators::class.java)
+            launcher?.launch(intent)
+        }
+
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
@@ -196,6 +215,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     loadFromDb()
                 }
             }
+
+        loadFromDb()
     }
 
     private fun loadFromDb() {
@@ -204,24 +225,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val profileData = database.profileDao().getProfileData()
             val stepsData = database.stepsCounterDao().getDayData(date, date)
             val waterData = database.waterCounterDao().getDayData(date, date)
-
-            val stepsDataAll = database.stepsCounterDao().getStepsData()
             withContext(Dispatchers.Main) {
-/*
-                Log.d(
-                    "MyLog",
-                    "${
-                        stepsDataAll.map { it.stepCountStart }.first()
-                    } ${
-                        stepsDataAll.map { it.stepCountEnd }.last()
-                    } ${stepsDataAll.map { it.stepsNorm }.last()}"
-                )
-*/
-
-                if (stepsDataAll.isNotEmpty()) {
-                    Log.d("MyLog", stepsDataAll.toString())
-                }
-                //caloriesMax = 2500.0
                 caloriesNow = 0.0
                 waterNow = 0
 
@@ -245,12 +249,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
                 if (stepsData.isNotEmpty()) {
                     stepCountAtStartOfDay = stepsData.last().stepCountStart
-
                     stepsNorm = stepsData.last().stepsNorm
-
-                    //totalSteps = stepsData.last().stepCountEnd
                 }
                 stepsNow = currentStepCount - stepCountAtStartOfDay
+
+                if (stepsNow < 0) {
+                    var stepCountStart: Int = 0
+                    Thread {
+                        database.stepsCounterDao()
+                            .updateStepCountStart(currentStepCount, date, date)
+                        stepCountStart =
+                            database.stepsCounterDao().getDayData(date, date).last().stepCountStart
+                    }.start()
+
+                    stepsNow = currentStepCount - stepCountStart
+                }
                 bg.progressBarMainSteps.max = stepsNorm
                 bg.progressBarMainSteps.progress = stepsNow
                 bg.txtMainSteps.text = "$stepsNow / $stepsNorm"
@@ -269,22 +282,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event!!.sensor.type == Sensor.TYPE_STEP_COUNTER) {
             currentStepCount = event.values[0].toInt()
-            //totalSteps += currentStepCount
 
-            //stepsNow = currentStepCount - stepCountAtStartOfDay
-
-            //bg.progressBarMainSteps.progress = stepsNow
-            //bg.txtMainSteps.text = "$stepsNow / $stepsNorm"
             val calendar = Calendar.getInstance()
             val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val time = calendar.time
             date = formatter.format(time)
 
+            val calendarBack = calendar.clone() as Calendar
+            calendarBack.add(Calendar.DAY_OF_YEAR, -1)
+            dateBack = formatter.format(calendarBack.time)
+
             updateCurrentDate()
-
             updateCurrentSteps()
-            //saveToDb()
-
             loadFromDb()
         }
     }
@@ -314,13 +323,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        //loadFromDb()
+
         val calendar = Calendar.getInstance()
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val time = calendar.time
         date = formatter.format(time)
-
-        Log.d("MyLog", date)
 
         stepCounterSensor?.also { stepCounter ->
             sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL)
@@ -340,15 +347,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun updateCurrentDate() {
         lifecycleScope.launch(Dispatchers.IO) {
             val data = database.stepsCounterDao().getDayData(date, date)
-
+            val dataBack = database.stepsCounterDao().getDayData(dateBack, dateBack)
             withContext(Dispatchers.Main) {
                 if (data.isEmpty()) {
-                    stepCountAtStartOfDay = currentStepCount
+                    stepCountAtStartOfDay = if (dataBack.isNotEmpty()) {
+                        dataBack.last().stepCountEnd
+                    } else {
+                        currentStepCount
+                    }
                     saveToDb()
-                    //loadFromDb()
                 }
             }
-
         }
     }
 

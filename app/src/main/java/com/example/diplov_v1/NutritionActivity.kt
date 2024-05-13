@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.example.diplov_v1.databinding.NutritionBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -80,6 +82,33 @@ class NutritionActivity : AppCompatActivity() {
             launcher?.launch(intent)
         }
 
+        bg.listViewMeal.setOnItemLongClickListener { _, _, position, _ ->
+            val nutrName = bg.listViewMeal.getItemAtPosition(position) as String
+
+            val bottomSheetDialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+            bottomSheetDialog.setContentView(view)
+
+            val btnOK = view.findViewById<Button>(R.id.btnOK)
+            val btnCancel = view.findViewById<Button>(R.id.btnCancel)
+
+            btnOK.setOnClickListener {
+                Thread {
+                    bottomSheetDialog.dismiss()
+                    database.listNutrDao().deleteNutrition(nutrName, date, date)
+                    loadFromDb()
+                }.start()
+            }
+
+            btnCancel.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+
+            bottomSheetDialog.show()
+
+            true
+        }
+
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
@@ -89,17 +118,6 @@ class NutritionActivity : AppCompatActivity() {
                     loadFromDb()
                 }
             }
-
-        /*
-                bg.btnDeleteTotal.setOnClickListener {
-                    Thread {
-                        database.listNutrTotalDao().deleteAllData()
-                    }.start()
-                }
-        */
-
-        //loadFromDb()
-
     }
 
     private fun setTxtViewText() {
@@ -116,7 +134,6 @@ class NutritionActivity : AppCompatActivity() {
 
     private fun loadFromDb() {
         lifecycleScope.launch(Dispatchers.IO) {
-            //val listNutrTotal = database.listNutrTotalDao().getAllData()
             val profileData = database.profileDao().getProfileData()
             val nutrList = database.listNutrDao().getDayData(date, date)
             withContext(Dispatchers.Main) {
@@ -127,37 +144,17 @@ class NutritionActivity : AppCompatActivity() {
 
                 listNutr.clear()
                 adapter.clear()
-                /*
-                                val kcalTotalList = listNutrTotal.map { it.kcalTotal }
-                                kcalTotal = 0
-                                kcalTotalList.forEach { kcalTotal += it }
 
-                                val proteinTotalList = listNutrTotal.map { it.proteinTotal }
-                                proteinTotal = 0
-                                proteinTotalList.forEach { proteinTotal += it }
-
-                                val fatsTotalList = listNutrTotal.map { it.fatsTotal }
-                                fatsTotal = 0
-                                fatsTotalList.forEach { fatsTotal += it }
-
-                                val carbTotalList = listNutrTotal.map { it.carbTotal }
-                                carbTotal = 0
-                                carbTotalList.forEach { carbTotal += it }
-                */
                 val kcalTotalList = nutrList.map { it.kcal }
-                //kcalTotal = 0.0
                 kcalTotalList.forEach { kcalTotal += it }
 
                 val proteinTotalList = nutrList.map { it.protein }
-                //proteinTotal = 0.0
                 proteinTotalList.forEach { proteinTotal += it }
 
                 val fatsTotalList = nutrList.map { it.fats }
-                //fatsTotal = 0.0
                 fatsTotalList.forEach { fatsTotal += it }
 
                 val carbTotalList = nutrList.map { it.carb }
-                //carbTotal = 0.0
                 carbTotalList.forEach { carbTotal += it }
 
                 if (profileData.isNotEmpty()) {
@@ -176,7 +173,6 @@ class NutritionActivity : AppCompatActivity() {
                         adapter.add(listNutr.last())
                     }
                 }
-                //bg.listViewMeal.adapter = adapter
             }
         }
     }
@@ -206,7 +202,6 @@ class NutritionActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
-
     private fun showDatePicker() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -226,8 +221,6 @@ class NutritionActivity : AppCompatActivity() {
     private fun handleSelectedDate(year: Int, month: Int, dayOfMonth: Int) {
         calendar.set(year, month, dayOfMonth)
         updateCurrentDate(bg.txtDate)
-        //loadFromDb()
-        val selectedDate = "$dayOfMonth/${month + 1}/$year"
     }
 
     private fun updateCurrentDate(textView: TextView) {
@@ -245,6 +238,5 @@ class NutritionActivity : AppCompatActivity() {
     private fun updateDateByOffset(offset: Int) {
         calendar.add(Calendar.DAY_OF_MONTH, offset)
         updateCurrentDate(bg.txtDate)
-        //loadFromDb()
     }
 }

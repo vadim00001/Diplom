@@ -22,4 +22,10 @@
         <item>Похудение</item>
         <item>Набор массы</item>
     </string-array>
+
+    <string-array name="HealthIndicators">
+        <item>Процент подкожного жира</item>
+        <item>Уровень сахара в крови</item>
+        <item>Артериальное давление</item>
+    </string-array>
 </resources>

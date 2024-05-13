@@ -2,7 +2,6 @@ package com.example.diplov_v1
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.diplov_v1.databinding.StatisticsBinding
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
-
 
 class StatisticsActivity : AppCompatActivity() {
     private lateinit var bg: StatisticsBinding
@@ -41,10 +39,7 @@ class StatisticsActivity : AppCompatActivity() {
 
         database = Db.getDb(this)
 
-        //updateCurrentDate(bg.txtDate)
         bg.txtDate.setOnClickListener { showDatePicker() }
-        //bg.btnDateBack.setOnClickListener { updateDateByOffset(-1) }
-        //bg.btnDateNext.setOnClickListener { updateDateByOffset(1) }
 
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val endDateCalendar = calendar.time
@@ -55,8 +50,6 @@ class StatisticsActivity : AppCompatActivity() {
         startDate = formatter.format(startDateCalendar.time)
 
         updatePeriodTextView()
-
-
     }
 
     private fun loadFromDb() {
@@ -71,9 +64,6 @@ class StatisticsActivity : AppCompatActivity() {
             val stepsDataPeriod = database.stepsCounterDao().getDayData(startDate, endDate)
             val waterDataPeriod = database.waterCounterDao().getDayData(startDate, endDate)
             withContext(Dispatchers.Main) {
-                Log.d("MyLog", nutrData.toString())
-                Log.d("MyLog", nutrDataPeriod.toString())
-
                 bg.txtWeightChangeTotal.text = ""
                 bg.txtWeightChange.text = ""
                 bg.txtWeightAVG.text = ""
@@ -217,7 +207,6 @@ class StatisticsActivity : AppCompatActivity() {
                             carb.toFloat()
                         )
                     }
-                    //val colors = intArrayOf(android.graphics.Color.BLUE, android.graphics.Color.RED, android.graphics.Color.GREEN)
                     val setProtein = LineDataSet(valuesProtein, "Белки")
                     setProtein.color = android.graphics.Color.CYAN
                     setProtein.valueTextSize = 10f
@@ -291,45 +280,8 @@ class StatisticsActivity : AppCompatActivity() {
                     dataSetsSteps.add(setSteps)
                     val dataSteps = LineData(dataSetsSteps)
                     chartSteps.data = dataSteps
-                    //chartSteps.xAxis.valueFormatter = IndexAxisValueFormatter(stepsDataPeriod.date.substring(5))
                     chartSteps.description.text = "Количество шагов"
                 }
-
-
-                /*
-                                if (stepsData.isNotEmpty()) {
-                                    val stepsCountEndTotal = stepsData.last().stepCountEnd
-                                    val stepsCountStartTotal = stepsData.first().stepCountStart
-                                    val stepsCountTotal = stepsCountEndTotal - stepsCountStartTotal
-                                    bg.txtStepsTotal.text = stepsCountTotal.toString()
-                                }
-
-                                if (stepsDataPeriod.isNotEmpty()) {
-                                    val stepsCountEndTotal = stepsDataPeriod.last().stepCountEnd
-                                    val stepsCountStartTotal = stepsDataPeriod.first().stepCountStart
-                                    val stepsCountTotal = stepsCountEndTotal - stepsCountStartTotal
-                                    bg.txtStepsPeriod.text = stepsCountTotal.toString()
-
-                                    val chartSteps: BarChart = findViewById(R.id.chartStepsBar)
-                                    val valuesSteps = stepsDataPeriod.mapIndexed { index, steps ->
-                                        BarEntry(
-                                            index.toFloat(),
-                                            (steps.stepCountEnd - steps.stepCountStart).toFloat()
-                                        )
-                                    }
-                                    val setSteps = BarDataSet(valuesSteps, "Шаги")
-                                    setSteps.color = android.graphics.Color.CYAN
-                                    setSteps.valueTextSize = 10f
-
-                                    val dataSetsSteps = ArrayList<IBarDataSet>()
-                                    dataSetsSteps.add(setSteps)
-                                    val dataSteps = BarData(dataSetsSteps)
-                                    chartSteps.data = dataSteps
-                                    chartSteps.xAxis.valueFormatter =
-                                        IndexAxisValueFormatter(stepsDataPeriod.map { it.date.substring(5) })
-                                    chartSteps.description.text = "Количество шагов"
-                                }
-                */
 
                 bg.txtWaterTotal.text = ""
                 bg.txtWaterPeriod.text = ""
@@ -347,29 +299,6 @@ class StatisticsActivity : AppCompatActivity() {
                     val waterPeriod = waterDataListt.sum()
                     bg.txtWaterPeriod.text = "$waterPeriod мл"
 
-                    /*
-                                        var dateWaterPeriod = waterDataPeriod.map { it.date }
-                                        dateWaterPeriod = dateWaterPeriod.map { it.substring(5) }
-
-                                        val chartWater: LineChart = findViewById(R.id.chartWater)
-                                        val valuesWater = waterDataList.mapIndexed { index, water ->
-                                            Entry(
-                                                index.toFloat(),
-                                                water.toFloat()
-                                            )
-                                        }
-                                        val setWater= LineDataSet(valuesWater, "Вода (мл)")
-                                        setWater.color = android.graphics.Color.CYAN
-                                        setWater.valueTextSize = 10f
-                                        setWater.lineWidth = 2f
-
-                                        val dataSetsWater = ArrayList<ILineDataSet>()
-                                        dataSetsWater.add(setWater)
-                                        val dataWater = LineData(dataSetsWater)
-                                        chartWater.data = dataWater
-                                        chartWater.xAxis.valueFormatter = IndexAxisValueFormatter(dateWaterPeriod)
-                                        chartWater.description.text = "Потребление воды"
-                    */
                     val waterDataByDate = waterDataPeriod.groupBy { it.date }
                     val waterSumByDate =
                         waterDataByDate.mapValues { (_, values) -> values.sumOf { it.glassVolume } }

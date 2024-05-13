@@ -18,16 +18,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                tools:srcCompat="@tools:sample/avatars" />
-
             <TextView
                 android:id="@+id/textView19"
                 android:layout_width="match_parent"
@@ -66,14 +56,13 @@
                     <EditText
                         android:id="@+id/editTxtName"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:ems="10"
                         android:hint="Введите ваше имя"
                         android:inputType="text|textPersonName"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView17"
@@ -104,12 +93,11 @@
                     <EditText
                         android:id="@+id/editTxtHeight"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
                         android:hint="Введите ваш рост"
                         android:inputType="number|numberDecimal"
-                        android:textColorHint="@color/material_dynamic_neutral_variant60"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="@+id/editTxtName"
                         app:layout_constraintStart_toStartOf="@+id/editTxtName"
@@ -129,12 +117,11 @@
                     <EditText
                         android:id="@+id/editTxtWeight"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
                         android:hint="Введите ваш вес"
                         android:inputType="number|numberDecimal"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="@+id/editTxtName"
                         app:layout_constraintStart_toStartOf="@+id/editTxtName"
@@ -171,12 +158,11 @@
                     <EditText
                         android:id="@+id/editTxtAge"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
                         android:hint="Введите ваш возраст"
                         android:inputType="number"
-                        android:textColorHint="@color/material_dynamic_neutral_variant60"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="@+id/editTxtName"
                         app:layout_constraintStart_toStartOf="@+id/editTxtName"
@@ -289,14 +275,13 @@
                     <EditText
                         android:id="@+id/editTxtFatPercent"
                         android:layout_width="75dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:ems="10"
                         android:gravity="center"
                         android:hint="% жира"
                         android:inputType="number"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView22" />
@@ -322,7 +307,6 @@
                         android:gravity="center"
                         android:hint="%"
                         android:inputType="number"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView25" />
@@ -349,7 +333,6 @@
                         android:hint="%"
                         android:inputType="number"
                         android:text="20"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -365,7 +348,6 @@
                         android:hint="%"
                         android:inputType="number"
                         android:text="25"
-                        android:textColorHint="@color/material_dynamic_neutral60"
                         android:textSize="16sp"
                         app:layout_constraintStart_toEndOf="@+id/editTxtProtein"
                         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -381,7 +363,6 @@
                         android:hint="%"
                         android:inputType="number"
                         android:text="55"
-                        android:textColorHint="@color/material_dynamic_neutral_variant60"
                         android:textSize="16sp"
                         app:layout_constraintStart_toEndOf="@+id/editTxtFat"
                         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -440,7 +421,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textSize="24sp"
-                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="@+id/textView3"
                         app:layout_constraintStart_toStartOf="@+id/textView3"
                         app:layout_constraintTop_toBottomOf="@+id/textView3" />
